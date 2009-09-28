@@ -52,6 +52,11 @@ int main()
 
 	cout << "JSON:" << endl << ss.str() << endl;
 
+	ss.str("");
+	
+	json::generate(o, ss, true);
+	cout << "JSON:" << endl << ss.str() << endl;
+
 	return 0;
 }
 

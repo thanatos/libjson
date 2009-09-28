@@ -67,8 +67,8 @@ namespace json
 	class GeneratorState
 	{
 	public:
-		GeneratorState(const json::Object &obj, std::ostream &out_stream);
-		GeneratorState(const json::Array &arr, std::ostream &out_stream);
+		GeneratorState(const json::Object &obj, std::ostream &out_stream, bool pretty_print, const std::string &indent);
+		GeneratorState(const json::Array &arr, std::ostream &out_stream, bool pretty_print, const std::string &indent);
 	
 		bool loop();
 	
@@ -85,9 +85,6 @@ namespace json
 
 		static std::string transformString(const std::string &s);
 
-		void setPrettyPrint(bool pretty_print) { m_pretty_print = pretty_print; }
-		void setIndent(const std::string &indent) { m_indent = indent; }
-	
 	private:
 		std::stack<JsonStackItem> m_stack;
 		std::ostream &m_out;

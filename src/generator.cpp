@@ -31,14 +31,14 @@
 
 #include "generator_private.h"
 
-json::GeneratorState::GeneratorState(const json::Object &obj, std::ostream &out_stream) :
-	m_out(out_stream), m_pretty_print(false), m_indent("\t")
+json::GeneratorState::GeneratorState(const json::Object &obj, std::ostream &out_stream, bool pretty_print, const std::string &indent) :
+	m_out(out_stream), m_pretty_print(pretty_print), m_indent(indent)
 {
 	startObject(&obj);
 }
 
-json::GeneratorState::GeneratorState(const json::Array &arr, std::ostream &out_stream) :
-	m_out(out_stream), m_pretty_print(false), m_indent("\t")
+json::GeneratorState::GeneratorState(const json::Array &arr, std::ostream &out_stream, bool pretty_print, const std::string &indent) :
+	m_out(out_stream), m_pretty_print(pretty_print), m_indent(indent)
 {
 	startArray(&arr);
 }
@@ -64,13 +64,12 @@ void json::GeneratorState::loopObject()
 		{
 			outputIndent();
 		}
-		else
-		{
-			m_out << ' ';
-		}
 		m_out << '}';
 		return;
 	}
+
+	if(m_pretty_print)
+		outputIndent();
 
 	m_out << '\"' << transformString(m_stack.top().i_object.key()) << '\"';
 	m_out << ": ";
@@ -82,7 +81,12 @@ void json::GeneratorState::loopObject()
 	if(m_stack.top().i_object != obj->end())
 	{
 		m_out << ',';
+		if(!m_pretty_print)
+			m_out << ' ';
 	}
+
+	if(m_pretty_print)
+		m_out << '\n';
 }
 
 void json::GeneratorState::loopArray()
@@ -108,6 +112,8 @@ void json::GeneratorState::loopArray()
 	if(m_stack.top().i_array != arr->end())
 	{
 		m_out << ',';
+		if(!m_pretty_print)
+			m_out << ' ';
 	}
 }
 
@@ -135,7 +141,7 @@ void json::GeneratorState::startArray(const json::Array *arr)
 	if(m_pretty_print)
 	{
 		outputIndent();
-		m_out << "{\n";
+		m_out << "[\n";
 	}
 	else
 	{
