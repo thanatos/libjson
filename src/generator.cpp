@@ -45,6 +45,7 @@ json::GeneratorState::GeneratorState(const json::Array &arr, std::ostream &out_s
 
 bool json::GeneratorState::loop()
 {
+	std::cerr << "loop(), stack size: " << m_stack.size() << std::endl;
 	if(m_stack.top().type == json::STACK_OBJECT)
 		loopObject();
 	else
@@ -75,6 +76,7 @@ void json::GeneratorState::loopObject()
 	m_out << ": ";
 	// Get the sub-object.
 	const Value *v = m_stack.top().i_object.value();
+
 	handleItem(v);
 
 	++(m_stack.top().i_object);
@@ -106,6 +108,9 @@ void json::GeneratorState::loopArray()
 
 	// Get the sub-object
 	const Value *v = *(m_stack.top().i_array);
+
+
+
 	handleItem(v);
 
 	++(m_stack.top().i_array);

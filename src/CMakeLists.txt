@@ -5,5 +5,6 @@ add_library(
 	generator.cpp
 	generator_stub.cpp
 	object.cpp
+	primitives.cpp
 )
 

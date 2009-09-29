@@ -22,23 +22,25 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef LIBJSON__JSON_H
-#define LIBJSON__JSON_H
+#ifndef LIBJSON__JSON_EXCEPTION_H
+#define LIBJSON__JSON_EXCEPTION_H
 
-#include <iostream>
-#include <string>
-
-#include "json_value.h"
-#include "json_array.h"
-#include "json_object.h"
-#include "json_primitives.h"
-#include "json_exception.h"
+#include <stdexcept>
 
 namespace json
 {
-	void generate(const json::Object &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
-	void generate(const json::Array &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
+	class InvalidFloatingPointException : public std::domain_error
+	{
+	public:
+		InvalidFloatingPointException(const std::string &msg) : std::domain_error(msg) { }
+	};
+
+	class InvalidUtf8Exception : public std::runtime_error
+	{
+	public:
+		InvalidUtf8Exception(const std::string &msg) : std::runtime_error(msg) { }
+		InvalidUtf8Exception() : std::runtime_error("An invalid UTF-8 string was passed to a function expecting one.") { }
+	};
 }
 
 #endif
-

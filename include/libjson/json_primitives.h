@@ -26,7 +26,9 @@
 #define LIBJSON__JSON_PRIMITIVES_H
 
 #include "json.h"
+#include "json_exception.h"
 
+#include <cmath>
 #include <string>
 
 namespace json
@@ -38,7 +40,7 @@ namespace json
 		String(const std::string &s) : Value(TYPE_STRING), m_value(s) { }
 
 		std::string value() const throw() { return m_value; }
-		void set(const std::string &s) { m_value = s; }
+		void set(const std::string &str);
 
 		Value *clone() const { return new String(*this); }
 	private:
@@ -55,7 +57,9 @@ namespace json
 		double value() const throw() { return m_value; }
 		double set(double d)
 		{
-			// TODO: Check for illegal values (inf, nan, etc)
+			// Check for illegal values (inf, nan, etc)
+			if(!std::isfinite(d))
+				throw InvalidFloatingPointException("Non-finite double passed to json::Double.");
 			m_value = d;
 		}
 

@@ -22,23 +22,39 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef LIBJSON__JSON_H
-#define LIBJSON__JSON_H
+#include "json.h"
 
-#include <iostream>
-#include <string>
-
-#include "json_value.h"
-#include "json_array.h"
-#include "json_object.h"
-#include "json_primitives.h"
-#include "json_exception.h"
-
-namespace json
+void json::String::set(const std::string &str)
 {
-	void generate(const json::Object &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
-	void generate(const json::Array &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
-}
+	int continuation_bytes = 0;
 
-#endif
+	for(std::string::const_iterator i = str.begin(); i != str.end(); ++i)
+	{
+		if(continuation_bytes > 0)
+		{
+			// This should be a continuation byte.
+			if(0x80 != (*i & 0xC0))
+				throw json::InvalidUtf8Exception();
+			--continuation_bytes;
+		}
+		else if((*i & 0xC0) == 0xC0)
+		{
+			continuation_bytes = 1;
+		}
+		else if((*i & 0xE0) == 0xE0)
+		{
+			continuation_bytes = 2;
+		}
+		else if((*i & 0xF0) == 0xF0)
+		{
+			continuation_bytes = 3;
+		}
+	}
+
+	if(continuation_bytes > 0)
+		throw json::InvalidUtf8Exception();
+
+	// Everything is good. Yay.
+	m_value = str;
+}
 
