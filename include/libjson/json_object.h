@@ -30,6 +30,11 @@
 
 namespace json
 {
+	/**
+	 * \brief A JSON object.
+	 * JSON objects are key-value maps. Users of JSON object should not assume
+	 * that keys will be in any particular order. Keys are unique.
+	 */
 	class Object : public Value
 	{
 	private:
@@ -130,10 +135,13 @@ namespace json
 			friend class json::Object;
 		};
 
+		/// Create an new, empty object.
 		Object() : Value(TYPE_OBJECT) { }
+		/// Create a copy of an object.
 		Object(const Object &o);
 		virtual ~Object();
 
+		/// Swap this object with another object.
 		void swap(Object &o);
 		json::Object &operator = (const json::Object &o);
 
@@ -143,11 +151,39 @@ namespace json
 		iterator end() { return iterator(m_members.end()); }
 		const_iterator end() const { return const_iterator(m_members.end()); }
 
+		/// Get a value from a key.
 		Value *getValue(const std::string &key);
+		/// Get a value from a key.
 		const Value *getValue(const std::string &key) const;
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * This function creates a copy of val.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
 		void setValue(const std::string &key, const Value &val);
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * This function creates a copy of val.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
 		void setValue(const std::string &key, const Value *val);
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * \note This function does not create a copy of val. The object will
+		 * take ownership of val, and will free it appropriately.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
 		void takeValue(const std::string &key, Value *val);
+		/**
+		 * \brief Removes a key from the object.
+		 * Removes a value from the object.
+		 */
 		void removeValue(const std::string &key);
 
 		Value *clone() const { return new Object(*this); }

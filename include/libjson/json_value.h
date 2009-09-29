@@ -41,9 +41,15 @@ namespace json
 		TYPE_NULL
 	};
 
+	/**
+	 * \brief A JSON data type.
+	 * A class representing an item of JSON data. This is a base class to one
+	 * of the many JSON types.
+	 */
 	class Value
 	{
 	public:
+		/// Get the type of the value.
 		ValueType type() const { return m_type; }
 
 		virtual ~Value() { }

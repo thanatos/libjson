@@ -33,20 +33,35 @@
 
 namespace json
 {
+	/**
+	 * \brief JSON string primitive.
+	 */
 	class String : public Value
 	{
 	public:
+		/// Creates a new, empty string.
 		String() : Value(TYPE_STRING) { }
+		/// Creates a new string from s. s should be UTF-8 encoded.
 		String(const std::string &s) : Value(TYPE_STRING), m_value(s) { }
 
+		/// Gets the value of the string as a UTF-8 string.
 		std::string value() const throw() { return m_value; }
+		/**
+		 * Sets the value of the string.
+		 * \param str The UTF-8 encoded string to set this string to.
+		 * \exception InvalidUtf8Exception The passed string is not valid UTF-8.
+		 */
 		void set(const std::string &str);
 
+		/// Clones this string.
 		Value *clone() const { return new String(*this); }
 	private:
 		std::string m_value;
 	};
 
+	/**
+	 * \brief JSON floating-point primitive.
+	 */
 	class Double : public Value
 	{
 	public:
