@@ -124,6 +124,11 @@ void json::Object::takeValue(const std::string &key, Value *val)
 
 void json::Object::removeValue(const std::string &key)
 {
-	m_members.erase(key);
+	MapType::iterator i = m_members.find(key);
+	if(i != m_members.end())
+	{
+		delete i->second;
+		m_members.erase(i);
+	}
 }
 
