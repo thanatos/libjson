@@ -45,7 +45,6 @@ json::GeneratorState::GeneratorState(const json::Array &arr, std::ostream &out_s
 
 bool json::GeneratorState::loop()
 {
-	std::cerr << "loop(), stack size: " << m_stack.size() << std::endl;
 	if(m_stack.top().type == json::STACK_OBJECT)
 		loopObject();
 	else
@@ -63,10 +62,20 @@ void json::GeneratorState::loopObject()
 		m_stack.pop();
 		if(m_pretty_print)
 		{
+			m_out << '\n';
 			outputIndent();
 		}
 		m_out << '}';
 		return;
+	}
+
+	if(m_stack.top().i_object != obj->begin())
+	{
+		m_out << ',';
+		if(m_pretty_print)
+			m_out << '\n';
+		else
+			m_out << ' ';
 	}
 
 	if(m_pretty_print)
@@ -76,19 +85,11 @@ void json::GeneratorState::loopObject()
 	m_out << ": ";
 	// Get the sub-object.
 	const Value *v = m_stack.top().i_object.value();
-
-	handleItem(v);
-
+	// Increment now, before we handle the object.
+	// Calling handleItem() might change our stack, so we've got to do this this way.
 	++(m_stack.top().i_object);
-	if(m_stack.top().i_object != obj->end())
-	{
-		m_out << ',';
-		if(!m_pretty_print)
-			m_out << ' ';
-	}
-
-	if(m_pretty_print)
-		m_out << '\n';
+	// And last, do it:
+	handleItem(v);
 }
 
 void json::GeneratorState::loopArray()
@@ -100,26 +101,32 @@ void json::GeneratorState::loopArray()
 		m_stack.pop();
 		if(m_pretty_print)
 		{
+			m_out << '\n';
 			outputIndent();
 		}
 		m_out << ']';
 		return;
 	}
 
-	// Get the sub-object
-	const Value *v = *(m_stack.top().i_array);
-
-
-
-	handleItem(v);
-
-	++(m_stack.top().i_array);
-	if(m_stack.top().i_array != arr->end())
+	if(m_stack.top().i_array != arr->begin())
 	{
 		m_out << ',';
-		if(!m_pretty_print)
+		if(m_pretty_print)
+			m_out << '\n';
+		else
 			m_out << ' ';
 	}
+
+	if(m_pretty_print)
+		outputIndent();
+
+	// Get the sub-object
+	const Value *v = *(m_stack.top().i_array);
+	// Increment now, before we handle the object.
+	// Calling handleItem() might change our stack, so we've got to do this this way.
+	++(m_stack.top().i_array);
+	// And last, do it:
+	handleItem(v);
 }
 
 void json::GeneratorState::outputIndent()
@@ -145,6 +152,8 @@ void json::GeneratorState::startArray(const json::Array *arr)
 {
 	if(m_pretty_print)
 	{
+		if(!m_stack.empty())
+			m_out << '\n';
 		outputIndent();
 		m_out << "[\n";
 	}
@@ -159,6 +168,8 @@ void json::GeneratorState::startObject(const json::Object *obj)
 {
 	if(m_pretty_print)
 	{
+		if(!m_stack.empty())
+			m_out << '\n';
 		outputIndent();
 		m_out << "{\n";
 	}

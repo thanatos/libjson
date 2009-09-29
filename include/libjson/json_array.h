@@ -45,7 +45,8 @@ namespace json
 
 		Value *operator [] (int index) { return m_values[index]; }
 
-		void pushBack(Value *v);
+		void pushBack(const Value *v);
+		void pushBack(const Value &v) { pushBack(&v); }
 		void pushBackTake(Value *v) { m_values.push_back(v); }
 
 		const_iterator begin() const { return m_values.begin(); }

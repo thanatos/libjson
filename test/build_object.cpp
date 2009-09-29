@@ -39,6 +39,19 @@ int main()
 	o.setValue("testBool", json::Bool(false));
 	o.setValue("testNull", json::Null());
 
+	json::Object o2;
+
+	o2.setValue("aSubKey", json::String("Some text."));
+
+	o.setValue("testObject", o2);
+
+	json::Array arr;
+	arr.pushBack(json::Integer(42));
+	arr.pushBack(json::Integer(1337));
+	arr.pushBack(json::String("Even more text."));
+
+	o.setValue("anArray", arr);
+
 	json::Object::const_iterator i;
 
 	for(i = o.begin(); i != o.end(); ++i)

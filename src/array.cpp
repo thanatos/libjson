@@ -82,7 +82,7 @@ json::Array &json::Array::operator = (const json::Array &a)
 	return *this;
 }
 
-void json::Array::pushBack(json::Value *v)
+void json::Array::pushBack(const json::Value *v)
 {
 	Value *c = NULL;
 	try
