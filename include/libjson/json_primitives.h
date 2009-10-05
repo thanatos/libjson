@@ -97,10 +97,11 @@ namespace json
 
 	class Integer64 : public Value
 	{
+	public:
 		Integer64() : Value(TYPE_INTEGER64), value(0) { }
 		Integer64(int64_t i) : Value(TYPE_INTEGER64), value(i) { }
 		Integer64(const Integer64 &i) : Value(TYPE_INTEGER64), value(i.value) { }
-		Integer64(const Integer &i) : Value(TYPE_INTEGRE64), value(i.value) { }
+		Integer64(const Integer &i) : Value(TYPE_INTEGER64), value(i.value) { }
 
 		int64_t value;
 
