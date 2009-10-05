@@ -65,9 +65,9 @@ namespace json
 	class Double : public Value
 	{
 	public:
-		Double() : Value(TYPE_FLOAT), m_value(0) { }
-		Double(double d) : Value(TYPE_FLOAT), m_value(0) { set(d); }
-		Double(const Double &d) : Value(TYPE_FLOAT), m_value(d.m_value) { }
+		Double() : Value(TYPE_DOUBLE), m_value(0) { }
+		Double(double d) : Value(TYPE_DOUBLE), m_value(0) { set(d); }
+		Double(const Double &d) : Value(TYPE_DOUBLE), m_value(d.m_value) { }
 
 		double value() const throw() { return m_value; }
 		double set(double d)
@@ -93,6 +93,18 @@ namespace json
 		int value;
 
 		Value *clone() const { return new Integer(*this); }
+	};
+
+	class Integer64 : public Value
+	{
+		Integer64() : Value(TYPE_INTEGER64), value(0) { }
+		Integer64(int64_t i) : Value(TYPE_INTEGER64), value(i) { }
+		Integer64(const Integer64 &i) : Value(TYPE_INTEGER64), value(i.value) { }
+		Integer64(const Integer &i) : Value(TYPE_INTEGRE64), value(i.value) { }
+
+		int64_t value;
+
+		Value *clone() const { return new Integer64(*this); }
 	};
 
 	class Bool : public Value

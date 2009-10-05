@@ -220,7 +220,13 @@ void json::GeneratorState::generateBasic(const Value *v)
 			m_out << i->value;
 			break;
 		}
-	case json::TYPE_FLOAT:
+	case json::TYPE_INTEGER64:
+		{
+			const json::Integer64 *i = dynamic_cast<const json::Integer64 *>(v);
+			m_out << i->value;
+			break;
+		}
+	case json::TYPE_DOUBLE:
 		{
 			const json::Double *d = dynamic_cast<const json::Double *>(v);
 			m_out << d->value();

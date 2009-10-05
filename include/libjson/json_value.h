@@ -32,7 +32,7 @@ namespace json
 		TYPE_OBJECT,
 		TYPE_ARRAY,
 		// Numerics
-		TYPE_FLOAT,
+		TYPE_DOUBLE,
 		TYPE_INTEGER,
 		TYPE_INTEGER64,
 		// Others
