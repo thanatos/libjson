@@ -6,5 +6,6 @@ add_library(
 	generator_stub.cpp
 	object.cpp
 	primitives.cpp
+	utf8.cpp
 )
 

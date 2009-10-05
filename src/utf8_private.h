@@ -22,12 +22,11 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-#include "json.h"
-#include "utf8_private.h"
 
-void json::String::set(const std::string &str)
-{
-	check_is_valid_utf8(str);
-	m_value = str;
-}
+#ifndef LIBJSON__UTF8_PRIVATE_H
+#define LIBJSON__UTF8_PRIVATE_H
 
+void check_is_valid_utf8(const std::string &str);
+bool is_valid_utf8(const std::string &str);
+
+#endif
