@@ -29,13 +29,19 @@ void json::generate(const json::Object &obj, std::ostream &out, bool pretty_prin
 {
 	GeneratorState s(obj, out, pretty_print, indent);
 
-	while(s.loop());
+	while(s.loop())
+	{
+		// No body needed, we just call loop until it's done.
+	}
 }
 
 void json::generate(const json::Array &arr, std::ostream &out, bool pretty_print, const std::string &indent)
 {
 	GeneratorState s(arr, out, pretty_print, indent);
 
-	while(s.loop());
+	while(s.loop())
+	{
+		// No body needed, we just call loop until it's done.
+	}
 }
 
