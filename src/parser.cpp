@@ -337,8 +337,8 @@ void parse_item(std::istream &s, std::stack<json::Value *> &struct_stack)
 	// See if we've reached the end:
 	char c = s.peek();
 	check_stream(s);
-	if(arr && c == ']'
-		|| obj && c == '}')
+	if((arr && c == ']')
+		|| (obj && c == '}'))
 	{
 		s.ignore();
 		check_stream(s);
