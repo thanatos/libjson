@@ -34,6 +34,7 @@ namespace json
 {
 	/**
 	 * \brief A JSON object.
+	 *
 	 * JSON objects are key-value maps. Users of JSON object should not assume
 	 * that keys will be in any particular order. Keys are unique.
 	 */

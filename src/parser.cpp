@@ -26,6 +26,7 @@
 #include <stack>
 #include <cstdlib>
 #include <climits>
+#include <sstream>
 
 #include "json.h"
 #include "utf8_private.h"
@@ -427,3 +428,10 @@ json::Value *json::parse(std::istream &s)
 	return base_object;
 }
 
+json::Value *json::parse(const std::string &s)
+{
+	std::stringstream ss;
+
+	ss.str(s);
+	return json::parse(ss);
+}

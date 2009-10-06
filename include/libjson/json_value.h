@@ -27,6 +27,10 @@
 
 namespace json
 {
+	/**
+	 * \brief The type of a json::Value
+	 * Determines what the actual type of a json::Value is.
+	 */
 	enum ValueType
 	{
 		TYPE_OBJECT,
@@ -53,6 +57,7 @@ namespace json
 		ValueType type() const { return m_type; }
 
 		virtual ~Value() { }
+		/// Create a copy of a Value.
 		virtual Value *clone() const = 0;
 
 	protected:

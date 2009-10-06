@@ -62,6 +62,9 @@ namespace json
 
 	/**
 	 * \brief JSON floating-point primitive.
+	 *
+	 * JSON primitive that holds a floating-point number. JSON can only store
+	 * real numbers, values such as infinity or NaN cannot be represented.
 	 */
 	class Double : public Value
 	{

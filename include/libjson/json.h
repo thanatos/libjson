@@ -22,6 +22,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+/**
+ * \file json.h
+ */
 #ifndef LIBJSON__JSON_H
 #define LIBJSON__JSON_H
 
@@ -34,12 +37,26 @@
 #include "json_primitives.h"
 #include "json_exception.h"
 
+/**
+ * The namespace within which this library's functionality is contained.
+ */
 namespace json
 {
 	void generate(const json::Object &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
 	void generate(const json::Array &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
 
+	/**
+	 * \brief Parse a JSON object or array from a stream.
+	 * \param s The stream containing the JSON object or array.
+	 * \return A pointer to the parsed object or array.
+	 */
 	json::Value *parse(std::istream &s);
+	/**
+	 * \brief Parse a JSON object or array from a string.
+	 * \param s The string containing a JSON object.
+	 * \return A pointer to the parsed object or array.
+	 */
+	json::Value *parse(const std::string &s);
 }
 
 #endif
