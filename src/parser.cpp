@@ -31,6 +31,8 @@
 #include "json.h"
 #include "utf8_private.h"
 
+/* Throw an exception if the passed stream is in an errored state.
+ */
 void check_stream(std::istream &s)
 {
 	if(!s)
@@ -42,7 +44,9 @@ void check_stream(std::istream &s)
 	}
 }
 
-
+/* Read a string from a stream.
+ * If we can't read the passed string from the stream, throw an exception.
+ */
 void read_string(std::istream &s, const std::string &str)
 {
 	std::string::const_iterator i;
@@ -57,6 +61,10 @@ void read_string(std::istream &s, const std::string &str)
 	}
 }
 
+/* Attempt to read a character from a stream.
+ * Return true, and remove it from the stream if it is present.
+ * Otherwise, return false.
+ */
 bool try_to_read(std::istream &s, char c_want)
 {
 	char c_have;
@@ -73,6 +81,11 @@ bool try_to_read(std::istream &s, char c_want)
 	return false;
 }
 
+/* Read digits from a stream, ie: [0-9]* or [0-9]+
+ * If need_one is true, we must read at least one digit ([0-9]+)
+ * Otherwise, no digits is acceptable ([0-9]*)
+ * If need_one is true, and we can't read any digits, throw an exception.
+ */
 void read_digits_from_stream(std::istream &s, std::string &str, bool need_one)
 {
 	while(true)
@@ -98,6 +111,10 @@ void read_digits_from_stream(std::istream &s, std::string &str, bool need_one)
 	}
 }
 
+/* Read a numeric value, either integer or floating point, from the stream.
+ * Return it as a json::Value -- this will be either a json::Double or a
+ * json::Integer.
+ */
 json::Value *read_json_numeric(std::istream &s)
 {
 	std::string numeric_text;
@@ -173,6 +190,13 @@ json::Value *read_json_numeric(std::istream &s)
 	throw json::ParseException();
 }
 
+/* Read a JSON string from a stream. This returns the actual string, and not
+ * a json::String as it gets used to read keys in objects as well.
+ * A JSON string is:
+ *   "text... "
+ * ie, an opening quote, characters, a closing quote. There are some escape
+ * sequences for things like quotes or slashes.
+ */
 std::string read_json_string_basic(std::istream &s)
 {
 	char c;
@@ -245,6 +269,9 @@ std::string read_json_string_basic(std::istream &s)
 	return text;
 }
 
+/* Remove as much whitespace (tabs, newlines, carriage returns or spaces)
+ * from the front of a string as possible.
+ */
 void eat_whitespace(std::istream &s)
 {
 	char c;
