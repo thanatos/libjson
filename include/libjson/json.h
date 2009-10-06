@@ -38,6 +38,8 @@ namespace json
 {
 	void generate(const json::Object &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
 	void generate(const json::Array &obj, std::ostream &out, bool pretty_print = false, const std::string &indent = "\t");
+
+	json::Value *parse(std::istream &s);
 }
 
 #endif

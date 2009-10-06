@@ -41,6 +41,13 @@ namespace json
 		InvalidUtf8Exception(const std::string &msg) : std::runtime_error(msg) { }
 		InvalidUtf8Exception() : std::runtime_error("An invalid UTF-8 string was passed to a function expecting one.") { }
 	};
+
+	class ParseException : public std::runtime_error
+	{
+	public:
+		ParseException() : std::runtime_error("Parse error in JSON text.") { }
+		ParseException(const std::string &msg) : std::runtime_error(msg) { }
+	};
 }
 
 #endif

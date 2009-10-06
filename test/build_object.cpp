@@ -70,6 +70,21 @@ int main()
 	json::generate(o, ss, true);
 	cout << "JSON:" << endl << ss.str() << endl;
 
+	cout << "------------------------------" << endl;
+
+	json::Value *v;
+
+	ss.str("{ \"key1\": 42, \"key2\": \"value2\" , \"key3\" : -29.9, \"key4\": null,"
+	"\"key8\": true, \"key9\": false, \"key10\": [2, 3, 4]}");
+
+	v = json::parse(ss);
+
+	ss.str("");
+	
+	json::generate(*dynamic_cast<json::Object *>(v), ss);
+
+	cout << ss.str() << endl;
+
 	return 0;
 }
 
