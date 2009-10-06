@@ -27,6 +27,7 @@
 
 #include "json.h"
 #include "json_exception.h"
+#include "json_unused.h"
 
 #include <cmath>
 #include <string>
@@ -124,7 +125,7 @@ namespace json
 	{
 	public:
 		Null() : Value(TYPE_NULL) { }
-		Null(const Null &n) : Value(TYPE_NULL) { }
+		Null(const Null &JSON_UNUSED(n)) : Value(TYPE_NULL) { }
 
 		Value *clone() const { return new Null(*this); }
 	};

@@ -28,14 +28,7 @@
 #include <string>
 #include <map>
 
-#ifdef UNUSED
-#elif defined(__GNUC__)
-	#define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-	#define UNUSED(x) /*@unused@*/ x
-#else
-	#define UNUSED(x) x
-#endif
+#include "json_unused.h"
 
 namespace json
 {
@@ -76,12 +69,12 @@ namespace json
 			}
 
 			// Post increment
-			iterator operator ++ (int UNUSED(unused))
+			iterator operator ++ (int JSON_UNUSED(unused))
 			{
 				iterator temp(*this);
 				return ++temp;
 			}
-			iterator operator -- (int UNUSED(unused))
+			iterator operator -- (int JSON_UNUSED(unused))
 			{
 				iterator temp(*this);
 				return --temp;
@@ -123,12 +116,12 @@ namespace json
 			}
 
 			// Post increment
-			const_iterator operator ++ (int UNUSED(unused))
+			const_iterator operator ++ (int JSON_UNUSED(unused))
 			{
 				const_iterator temp(*this);
 				return ++temp;
 			}
-			const_iterator operator -- (int UNUSED(unused))
+			const_iterator operator -- (int JSON_UNUSED(unused))
 			{
 				const_iterator temp(*this);
 				return --temp;
