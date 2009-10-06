@@ -37,7 +37,7 @@ namespace json
 	enum StackType
 	{
 		STACK_OBJECT,
-		STACK_ARRAY,
+		STACK_ARRAY
 	};
 
 	struct JsonStackItem
