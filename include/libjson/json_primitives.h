@@ -70,7 +70,7 @@ namespace json
 		Double(const Double &d) : Value(TYPE_DOUBLE), m_value(d.m_value) { }
 
 		double value() const throw() { return m_value; }
-		double set(double d)
+		void set(double d)
 		{
 			// Check for illegal values (inf, nan, etc)
 			if(!std::isfinite(d))
