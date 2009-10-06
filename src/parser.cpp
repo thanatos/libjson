@@ -34,7 +34,10 @@ void check_stream(std::istream &s)
 {
 	if(!s)
 	{
-		throw json::ParseException();
+		if(s.eof())
+			throw json::ParseException("Unexpected EOF in input stream.");
+		else
+			throw json::ParseException("I/O error in input.");
 	}
 }
 
@@ -49,7 +52,7 @@ void read_string(std::istream &s, const std::string &str)
 		s.get(c);
 		check_stream(s);
 		if(c != *i)
-			throw json::ParseException();
+			throw json::ParseException("Expected \"" + str + "\" input, but didn't find it.");
 	}
 }
 
