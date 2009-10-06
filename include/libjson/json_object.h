@@ -160,6 +160,9 @@ namespace json
 		iterator end() { return iterator(m_members.end()); }
 		const_iterator end() const { return const_iterator(m_members.end()); }
 
+		size_t size() const { return m_members.size(); }
+		bool empty() const { return m_members.empty(); }
+
 		/// Get a value from a key.
 		Value *getValue(const std::string &key);
 		/// Get a value from a key.

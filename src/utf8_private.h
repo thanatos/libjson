@@ -26,7 +26,10 @@
 #ifndef LIBJSON__UTF8_PRIVATE_H
 #define LIBJSON__UTF8_PRIVATE_H
 
+#include <stdint.h>
+
 void check_is_valid_utf8(const std::string &str);
 bool is_valid_utf8(const std::string &str);
+std::string to_utf8(uint32_t code_point);
 
 #endif

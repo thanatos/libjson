@@ -52,6 +52,9 @@ namespace json
 		const_iterator begin() const { return m_values.begin(); }
 		const_iterator end() const { return m_values.end(); }
 
+		size_t size() const { return m_values.size(); }
+		bool empty() const { return m_values.empty(); }
+
 		Value *clone() const { return new Array(*this); }
 
 	private:

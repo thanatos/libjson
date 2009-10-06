@@ -24,9 +24,40 @@
  */
 
 #include <string>
+#include <stdint.h>
 
 #include "utf8_private.h"
 #include "json.h"
+
+std::string to_utf8(uint32_t code_point)
+{
+	std::string text;
+
+	if(code_point < 0x80)
+		text += char(code_point);
+	else if(code_point < 0x800)
+	{
+		text += char(0xC0 | (code_point >> 6));
+		text += char(0x80 | (code_point & 0x3F));
+	}
+	else if(code_point < 0x10000)
+	{
+		text += char(0xE0 | (code_point >> 12));
+		text += char(0x80 | ((code_point >> 6) & 0x3F));
+		text += char(0x80 | (code_point & 0x3F));
+	}
+	else if(code_point <= 0x10FFFF)
+	{
+		text += char(0xF0 | (code_point >> 18));
+		text += char(0x80 | ((code_point >> 12) & 0x3F));
+		text += char(0x80 | ((code_point >> 6) & 0x3F));
+		text += char(0x80 | (code_point & 0x3F));
+	}
+	else
+		throw json::InvalidUtf8Exception();
+
+	return text;
+}
 
 void check_is_valid_utf8(const std::string &str)
 {
@@ -70,7 +101,7 @@ bool is_valid_utf8(const std::string &str)
 				}
 			}
 		}
-		else if(*i & 0x80 == 0)
+		else if((*i & 0x80) == 0)
 		{
 			// skip.
 			continue;
