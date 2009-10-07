@@ -1,6 +1,6 @@
 
 add_library(
-	json
+	json SHARED
 	array.cpp
 	generator.cpp
 	generator_stub.cpp
