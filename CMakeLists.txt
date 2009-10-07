@@ -16,6 +16,7 @@ install(FILES ${CMAKE_BINARY_DIR}/libjson.pc
 
 add_subdirectory(doc)
 add_subdirectory(example)
+add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(test)
 
