@@ -31,6 +31,7 @@
 
 #include <cmath>
 #include <string>
+#include <cstdint>
 
 namespace json
 {
