@@ -8,6 +8,11 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/include/libjson
 )
 
+configure_file(${CMAKE_SOURCE_DIR}/libjson.pc.cmake
+	${CMAKE_BINARY_DIR}/libjson.pc
+	@ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/libjson.pc
+	DESTINATION lib/pkgconfig)
 
 add_subdirectory(doc)
 add_subdirectory(example)
