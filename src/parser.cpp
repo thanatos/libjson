@@ -291,6 +291,9 @@ void eat_whitespace(std::istream &s)
 	}
 }
 
+/* Read in a JSON object or array start marker from the stream,
+ * and create and return a JSON object/array to store it.
+ */
 json::Value *read_json_object_or_array(std::istream &s)
 {
 	char c;
@@ -316,8 +319,13 @@ json::Value *read_json_object_or_array(std::istream &s)
 		throw json::ParseException();
 }
 
+/* Read in a JSON value from the stream. We should be positioned right before
+ * it.
+ */
 json::Value *read_json_value(std::istream &s)
 {
+	// Peek a character - this tells us what type we're looking at.
+	// All the JSON primitives differ in their first character.
 	char c;
 	c = s.peek();
 	check_stream(s);
@@ -348,6 +356,8 @@ json::Value *read_json_value(std::istream &s)
 	{
 		return read_json_numeric(s);
 	}
+	// By now, it should be an array or an object -- this function will throw
+	// if it isn't.
 	else return read_json_object_or_array(s);
 }
 
