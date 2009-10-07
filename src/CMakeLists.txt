@@ -10,3 +10,9 @@ add_library(
 	utf8.cpp
 )
 
+install(TARGETS json
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+)
+
