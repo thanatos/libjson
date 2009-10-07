@@ -203,8 +203,10 @@ std::string json::GeneratorState::transformString(const std::string &s)
 		// tab
 		else if(*i == 0x09)
 			ss << "\\t";
-		else if(*i < 0x20)
-			ss << "\\u" << std::hex << std::setw(4) << *i;
+		else if((unsigned char)(*i) < 0x20)
+		{
+			ss << "\\u" << std::hex << std::setw(4) << std::setfill('0') << int((unsigned char)*i);
+		}
 		else ss << *i;
 	}
 	return ss.str();
