@@ -4,7 +4,7 @@ libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
 Name: libjson
-Description: C++ JSON Library
+Description: @PACKAGE_DESCRIPTION@
 Version: @VERSION@
 URL: http://github.com/thanatos/libjson
 Libs: -L${libdir} -ljson

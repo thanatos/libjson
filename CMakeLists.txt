@@ -1,12 +1,21 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(json)
-set(VERSION 0.01)
+set(VERSION 0.1.1)
+set(AUTHOR "Roy Wellington <cactus_hugged@yahoo.com>") 
+set(PACKAGE_DESCRIPTION "C++ JSON Library")
+
+
+set(CPACK_PACKAGE_CONTACT ${AUTHOR})
+set(CPACK_PACKAGE_VERSION ${VERSION})
+set(CPACK_PACKAGE_DESCRIPTION ${PACKAGE_DESCRIPTION})
+include(CPack)
 
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/include/libjson
 )
+
 
 configure_file(${CMAKE_SOURCE_DIR}/libjson.pc.cmake
 	${CMAKE_BINARY_DIR}/libjson.pc
