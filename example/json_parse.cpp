@@ -23,60 +23,41 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 #include <iostream>
-#include <sstream>
 #include <string>
+#include <sstream>
+#include <locale.h>
 
 #include "json.h"
 
 using namespace std;
 
-void output_json(stringstream &ss, const string &description, const string &title)
+void print_object(json::Object &o)
 {
-	string line("==============================");
-	cout << "JSON, " << description << ":" << endl;
-	cout << "== " << title << " " << line.substr(0, line.size() - title.size() - 4) << endl;
-	cout << ss.str() << endl;
-	cout << line << endl;
-}
+	json::Object::const_iterator i;
 
-void output_single(json::Value &v, const string &description, bool pretty)
-{
-	stringstream ss;
-
-	json::Object *obj = NULL;
-	json::Array *arr = NULL;
-
-	if(v.type() == json::TYPE_ARRAY)
+	for(i = o.begin(); i != o.end(); ++i)
 	{
-		arr = dynamic_cast<json::Array *>(&v);
-		json::generate(*arr, ss, pretty);
+		if((*i)->type() == json::TYPE_STRING)
+		{
+			cout << "JSON string: \"" + dynamic_cast<const json::String *>(*i)->value() << "\"\n";
+		}
 	}
-	else
-	{
-		obj = dynamic_cast<json::Object *>(&v);
-		json::generate(*obj, ss, pretty);
-	}
-
-	output_json(ss, description, pretty ? "Pretty-print" : "Compact");
-}
-
-void output_both(json::Value &v, const string &description)
-{
-	output_single(v, description, true);
-	output_single(v, description, false);
 }
 
 int main()
 {
-	json::Array arr;
+	setlocale(LC_ALL, "");
 
-	for(int i = 0; i < 10; ++i)
-	{
-		arr.pushBack(json::Integer(i));
-	}
+	string json_text = "{ \"some_text\": \"Test... \\u00a320\" }";
 
-	output_both(arr, "integers 0 - 9");
-	
-	return 0;
+	json::Value *v;
+	json::Object *obj;
+
+	v = json::parse(json_text);
+	obj = dynamic_cast<json::Object *>(v);
+	print_object(*obj);
+
+	stringstream ss;
+	json::generate(*obj, ss);
+	cout << ss.str() << endl;
 }
-
