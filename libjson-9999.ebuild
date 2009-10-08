@@ -17,7 +17,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="dev-util/pkgconfig"
+DEPEND=""
 RDEPEND=""
 
 src_configure() {
