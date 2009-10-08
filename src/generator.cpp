@@ -26,6 +26,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cassert>
 
 #include "json.h"
 
@@ -249,6 +250,8 @@ void json::GeneratorState::generateBasic(const Value *v)
 			m_out << "\"" << transformString(s->value()) << "\"";
 			break;
 		}
+	default:
+		assert(false);
 	}
 }
 
