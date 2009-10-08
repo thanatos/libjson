@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <climits>
 #include <sstream>
+#include <stdint.h>
 
 #include "json.h"
 #include "utf8_private.h"
@@ -165,7 +166,7 @@ json::Value *read_json_numeric(std::istream &s)
 		read_digits_from_stream(s, numeric_text, true);
 	}
 
-	long long ll;
+	intmax_t ll;
 	char *endptr;
 
 	ll = strtoll(numeric_text.c_str(), &endptr, 10);
@@ -176,7 +177,7 @@ json::Value *read_json_numeric(std::istream &s)
 		{
 			return new json::Integer(ll);
 		}
-		else return new json::Integer64(ll);
+		else return new json::BigInteger(ll);
 	}
 
 	double d;

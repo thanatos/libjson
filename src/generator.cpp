@@ -222,9 +222,9 @@ void json::GeneratorState::generateBasic(const Value *v)
 			m_out << i->value;
 			break;
 		}
-	case json::TYPE_INTEGER64:
+	case json::TYPE_BIGINTEGER:
 		{
-			const json::Integer64 *i = dynamic_cast<const json::Integer64 *>(v);
+			const json::BigInteger *i = dynamic_cast<const json::BigInteger *>(v);
 			m_out << i->value;
 			break;
 		}

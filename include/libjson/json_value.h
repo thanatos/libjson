@@ -38,7 +38,7 @@ namespace json
 		// Numerics
 		TYPE_DOUBLE,
 		TYPE_INTEGER,
-		TYPE_INTEGER64,
+		TYPE_BIGINTEGER,
 		// Others
 		TYPE_STRING,
 		TYPE_BOOL,

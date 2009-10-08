@@ -31,7 +31,7 @@
 
 #include <cmath>
 #include <string>
-#include <cstdint>
+#include <stdint.h>
 
 namespace json
 {
@@ -100,17 +100,17 @@ namespace json
 		Value *clone() const { return new Integer(*this); }
 	};
 
-	class Integer64 : public Value
+	class BigInteger : public Value
 	{
 	public:
-		Integer64() : Value(TYPE_INTEGER64), value(0) { }
-		Integer64(int64_t i) : Value(TYPE_INTEGER64), value(i) { }
-		Integer64(const Integer64 &i) : Value(TYPE_INTEGER64), value(i.value) { }
-		Integer64(const Integer &i) : Value(TYPE_INTEGER64), value(i.value) { }
+		BigInteger() : Value(TYPE_BIGINTEGER), value(0) { }
+		BigInteger(intmax_t i) : Value(TYPE_BIGINTEGER), value(i) { }
+		BigInteger(const BigInteger &i) : Value(TYPE_BIGINTEGER), value(i.value) { }
+		BigInteger(const Integer &i) : Value(TYPE_BIGINTEGER), value(i.value) { }
 
-		int64_t value;
+		intmax_t value;
 
-		Value *clone() const { return new Integer64(*this); }
+		Value *clone() const { return new BigInteger(*this); }
 	};
 
 	class Bool : public Value
