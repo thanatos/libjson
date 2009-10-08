@@ -24,6 +24,10 @@ configure_file(${CMAKE_SOURCE_DIR}/libjson.pc.cmake
 install(FILES ${CMAKE_BINARY_DIR}/libjson.pc
 	DESTINATION lib/pkgconfig)
 
+configure_file(${CMAKE_SOURCE_DIR}/libjson-9999.ebuild
+	${CMAKE_BINARY_DIR}/libjson-9999.ebuild
+	@ONLY)
+
 add_subdirectory(doc)
 add_subdirectory(example)
 add_subdirectory(include)

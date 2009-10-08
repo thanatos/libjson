@@ -6,7 +6,7 @@ EAPI=2
 
 inherit cmake-utils git
 
-DESCRIPTION="C++ JSON library"
+DESCRIPTION="@PACKAGE_DESCRIPTION@"
 HOMEPAGE=""
 
 EGIT_REPO_URI="git://github.com/thanatos/libjson.git"
