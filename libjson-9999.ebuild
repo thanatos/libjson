@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright (C) 2009 Roy Wellington IV
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
