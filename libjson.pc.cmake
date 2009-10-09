@@ -8,4 +8,4 @@ Description: @PACKAGE_DESCRIPTION@
 Version: @VERSION@
 URL: http://github.com/thanatos/libjson
 Libs: -L${libdir} -ljson
-Cflags: -I${includedir}/libjson
+Cflags: -I${includedir}

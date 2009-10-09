@@ -14,7 +14,8 @@ include(CPack)
 
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/include/libjson
+	${CMAKE_SOURCE_DIR}/include/json
+	${CMAKE_SOURCE_DIR}/include
 )
 
 

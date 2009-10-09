@@ -1,3 +1,3 @@
-file(GLOB libjson_headers libjson/*.h)
+file(GLOB libjson_headers json/*.h)
 
-install(FILES ${libjson_headers} DESTINATION include/libjson)
+install(FILES ${libjson_headers} DESTINATION include/json)
