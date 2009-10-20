@@ -9,3 +9,7 @@ target_link_libraries(
 	json
 )
 
+add_test(
+	build_object
+	build_object
+)
