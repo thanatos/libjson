@@ -56,7 +56,7 @@ int main()
 
 	for(i = o.begin(); i != o.end(); ++i)
 	{
-		cout << "Key: " << i.key() << ", Value: " << i.value() << endl;
+		cout << "Key: " << i.key() << ", Value: " << &i.value() << endl;
 	}
 
 	std::stringstream ss;

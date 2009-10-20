@@ -44,6 +44,70 @@ namespace json
 		typedef std::map<std::string, Value *> MapType;
 
 	public:
+		// The iterator types follow the member function declarations
+		class iterator;
+		class const_iterator;
+
+		/// Create an new, empty object.
+		Object() : Value(TYPE_OBJECT) { }
+		/// Create a copy of an object.
+		Object(const Object &o);
+		virtual ~Object();
+
+		/// Swap this object with another object.
+		void swap(Object &o);
+		json::Object &operator = (const json::Object &o);
+
+		iterator begin() { return iterator(m_members.begin()); }
+		const_iterator begin() const { return const_iterator(m_members.begin()); }
+
+		iterator end() { return iterator(m_members.end()); }
+		const_iterator end() const { return const_iterator(m_members.end()); }
+
+		size_t size() const { return m_members.size(); }
+		bool empty() const { return m_members.empty(); }
+
+		/// Test if a key is present.
+		bool hasValue(const std::string &key) const;
+	
+		/// Get a value from a key.
+		Value &getValue(const std::string &key);
+		/// Get a value from a key.
+		const Value &getValue(const std::string &key) const;
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * This function creates a copy of val.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
+		void setValue(const std::string &key, const Value &val);
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * This function creates a copy of val.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
+		void setValue(const std::string &key, const Value *val);
+		/**
+		 * \brief Set a value inside the object.
+		 * If the key is already present, it is replaced.
+		 * \note This function does not create a copy of val. The object will
+		 * take ownership of val, and will free it appropriately.
+		 * \param key The key to associate the value with.
+		 * \param val The value to add to the object.
+		 */
+		void takeValue(const std::string &key, Value *val);
+		/**
+		 * \brief Removes a key from the object.
+		 * Removes a value from the object.
+		 */
+		void removeValue(const std::string &key);
+
+		Value *clone() const { return new Object(*this); }
+
+
 		// Note: We break our own casing rules just to keep with STL.
 
 		class iterator
@@ -53,9 +117,11 @@ namespace json
 			iterator(const iterator &i) : m_i(i.m_i) { }
 
 			const std::string &key() const { return m_i->first; }
-			Value *value() { return m_i->second; }
+			Value &value() { return *(m_i->second); }
 
-			Value *operator * () { return m_i->second; }
+			Value &operator * () { return *(m_i->second); }
+
+			Value *operator -> () { return m_i->second; }
 
 			// Pre-increment
 			iterator &operator ++ ()
@@ -100,9 +166,10 @@ namespace json
 			const_iterator(const iterator &i) : m_i(i.m_i) { }
 
 			const std::string &key() const { return m_i->first; }
-			const Value *value() { return m_i->second; }
+			const Value &value() { return *(m_i->second); }
 
-			Value *operator * () { return m_i->second; }
+			Value &operator * () { return *(m_i->second); }
+			Value *operator -> () { return m_i->second; }
 			
 			// Pre-increment
 			const_iterator &operator ++ ()
@@ -138,61 +205,6 @@ namespace json
 			friend class json::Object;
 		};
 
-		/// Create an new, empty object.
-		Object() : Value(TYPE_OBJECT) { }
-		/// Create a copy of an object.
-		Object(const Object &o);
-		virtual ~Object();
-
-		/// Swap this object with another object.
-		void swap(Object &o);
-		json::Object &operator = (const json::Object &o);
-
-		iterator begin() { return iterator(m_members.begin()); }
-		const_iterator begin() const { return const_iterator(m_members.begin()); }
-
-		iterator end() { return iterator(m_members.end()); }
-		const_iterator end() const { return const_iterator(m_members.end()); }
-
-		size_t size() const { return m_members.size(); }
-		bool empty() const { return m_members.empty(); }
-
-		/// Get a value from a key.
-		Value *getValue(const std::string &key);
-		/// Get a value from a key.
-		const Value *getValue(const std::string &key) const;
-		/**
-		 * \brief Set a value inside the object.
-		 * If the key is already present, it is replaced.
-		 * This function creates a copy of val.
-		 * \param key The key to associate the value with.
-		 * \param val The value to add to the object.
-		 */
-		void setValue(const std::string &key, const Value &val);
-		/**
-		 * \brief Set a value inside the object.
-		 * If the key is already present, it is replaced.
-		 * This function creates a copy of val.
-		 * \param key The key to associate the value with.
-		 * \param val The value to add to the object.
-		 */
-		void setValue(const std::string &key, const Value *val);
-		/**
-		 * \brief Set a value inside the object.
-		 * If the key is already present, it is replaced.
-		 * \note This function does not create a copy of val. The object will
-		 * take ownership of val, and will free it appropriately.
-		 * \param key The key to associate the value with.
-		 * \param val The value to add to the object.
-		 */
-		void takeValue(const std::string &key, Value *val);
-		/**
-		 * \brief Removes a key from the object.
-		 * Removes a value from the object.
-		 */
-		void removeValue(const std::string &key);
-
-		Value *clone() const { return new Object(*this); }
 	private:
 		MapType m_members;
 	};

@@ -48,6 +48,12 @@ namespace json
 		ParseException() : std::runtime_error("Parse error in JSON text.") { }
 		ParseException(const std::string &msg) : std::runtime_error(msg) { }
 	};
+
+	class InvalidKeyException : public std::runtime_error
+	{
+	public:
+		InvalidKeyException() : std::runtime_error("Key did not exist in object.") { }
+	};
 }
 
 #endif

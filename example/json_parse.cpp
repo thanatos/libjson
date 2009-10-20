@@ -37,9 +37,9 @@ void print_object(json::Object &o)
 
 	for(i = o.begin(); i != o.end(); ++i)
 	{
-		if((*i)->type() == json::TYPE_STRING)
+		if(i->type() == json::TYPE_STRING)
 		{
-			cout << "JSON string: \"" + dynamic_cast<const json::String *>(*i)->value() << "\"\n";
+			cout << "JSON string: \"" + dynamic_cast<const json::String &>(*i).value() << "\"\n";
 		}
 	}
 }
