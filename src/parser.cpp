@@ -191,6 +191,21 @@ json::Value *read_json_numeric(std::istream &s)
 	throw json::ParseException();
 }
 
+void read_four_hex_digits(std::istream &s, char *four_hex)
+{
+	for(size_t i = 0; i < 4; ++i)
+	{
+		four_hex[i] = s.get();
+		check_stream(s);
+		if(!((four_hex[i] >= '0' && four_hex[i] <= '9')
+			|| (four_hex[i] >= 'A' && four_hex[i] <= 'F')
+			|| (four_hex[i] >= 'a' && four_hex[i] <= 'f')))
+		{
+			throw json::ParseException();
+		}
+	}
+}
+
 /* Read a JSON string from a stream. This returns the actual string, and not
  * a json::String as it gets used to read keys in objects as well.
  * A JSON string is:
@@ -244,20 +259,31 @@ std::string read_json_string_basic(std::istream &s)
 			else if(escape_code == 'u')
 			{
 				char four_hex[5] = {0};
-				for(int i = 0; i < 4; ++i)
-				{
-					four_hex[i] = s.get();
-					check_stream(s);
-					if(!((four_hex[i] >= '0' && four_hex[i] <= '9')
-						|| (four_hex[i] >= 'A' && four_hex[i] <= 'F')
-						|| (four_hex[i] >= 'a' && four_hex[i] <= 'f')))
-					{
-						throw json::ParseException();
-					}
-				}
+				read_four_hex_digits(s, four_hex);
 
 				unsigned int code = strtoul(four_hex, NULL, 16);
-				text += to_utf8(code);
+				int surrogate_type = is_surrogate_pair(code);
+				if(surrogate_type == 0)
+					text += to_utf8(code);
+				else if(surrogate_type == 1)
+				{
+					// The last \u escape was the start marker of a surrogate pair.
+					// Look for the second half of the pair.
+					read_string(s, "\\u");
+					char four_hex_2[5] = {0};
+					read_four_hex_digits(s, four_hex_2);
+					unsigned int code2 = strtoul(four_hex_2, NULL, 16);
+					if(is_surrogate_pair(code2) != 2)
+						// There was another \u escape, but it wasn't the second half
+						// of the surrogate pair...
+						throw json::ParseException();
+					uint32_t code_point = decode_surrogate_pair(code, code2);
+					text += to_utf8(code);
+				}
+				else
+					// We found the second half of a surrogate pair, but there wasn't
+					// a first half...
+					throw json::ParseException();
 			}
 			else
 				throw json::ParseException();

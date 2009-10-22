@@ -31,5 +31,7 @@
 void check_is_valid_utf8(const std::string &str);
 bool is_valid_utf8(const std::string &str);
 std::string to_utf8(uint32_t code_point);
+int is_surrogate_pair(uint16_t code_unit);
+uint32_t decode_surrogate_pair(uint16_t first_code_unit, uint16_t second_code_uint);
 
 #endif
