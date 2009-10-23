@@ -220,6 +220,7 @@ std::string read_json_string_basic(std::istream &s)
 
 	// Read opening quote.
 	c = s.get();
+	check_stream(s);
 	if(!s || c != '\"')
 		throw json::ParseException();
 	
