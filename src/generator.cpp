@@ -85,12 +85,12 @@ void json::GeneratorState::loopObject()
 	m_out << '\"' << transformString(m_stack.top().i_object.key()) << '\"';
 	m_out << ": ";
 	// Get the sub-object.
-	const Value *v = m_stack.top().i_object.value();
+	const Value &v = m_stack.top().i_object.value();
 	// Increment now, before we handle the object.
 	// Calling handleItem() might change our stack, so we've got to do this this way.
 	++(m_stack.top().i_object);
 	// And last, do it:
-	handleItem(v);
+	handleItem(&v);
 }
 
 void json::GeneratorState::loopArray()
@@ -122,12 +122,12 @@ void json::GeneratorState::loopArray()
 		outputIndent();
 
 	// Get the sub-object
-	const Value *v = *(m_stack.top().i_array);
+	const Value &v = *(m_stack.top().i_array);
 	// Increment now, before we handle the object.
 	// Calling handleItem() might change our stack, so we've got to do this this way.
 	++(m_stack.top().i_array);
 	// And last, do it:
-	handleItem(v);
+	handleItem(&v);
 }
 
 void json::GeneratorState::outputIndent()

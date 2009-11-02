@@ -83,18 +83,24 @@ json::Object &json::Object::operator = (const json::Object &o)
 	return *this;
 }
 
-json::Value *json::Object::getValue(const std::string &key)
+json::Value &json::Object::getValue(const std::string &key)
 {
 	MapType::iterator i = m_members.find(key);
 
-	return i == m_members.end() ? NULL : i->second;
+	if(i == m_members.end())
+		throw json::InvalidKeyException();
+
+	return *(i->second);
 }
 
-const json::Value *json::Object::getValue(const std::string &key) const
+const json::Value &json::Object::getValue(const std::string &key) const
 {
 	MapType::const_iterator i = m_members.find(key);
+	
+	if(i == m_members.end())
+		throw json::InvalidKeyException();
 
-	return i == m_members.end() ? NULL : i->second;
+	return *(i->second);
 }
 
 void json::Object::setValue(const std::string &key, const Value &val)
@@ -119,7 +125,14 @@ void json::Object::setValue(const std::string &key, const Value *val)
 
 void json::Object::takeValue(const std::string &key, Value *val)
 {
-	m_members.insert(std::make_pair(key, val));
+	std::pair<MapType::iterator, bool> result;
+
+	result = m_members.insert(std::make_pair(key, val));
+	if(result.second == false)
+	{
+		delete m_members[key];
+		m_members[key] = val;
+	}
 }
 
 void json::Object::removeValue(const std::string &key)
@@ -130,5 +143,12 @@ void json::Object::removeValue(const std::string &key)
 		delete i->second;
 		m_members.erase(i);
 	}
+}
+
+bool json::Object::hasValue(const std::string &key) const
+{
+	MapType::const_iterator i = m_members.find(key);
+
+	return i != m_members.end();
 }
 

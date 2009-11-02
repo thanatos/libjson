@@ -24,6 +24,7 @@
  */
 
 #include <string>
+#include <cassert>
 #include <stdint.h>
 
 #include "utf8_private.h"
@@ -127,5 +128,26 @@ bool is_valid_utf8(const std::string &str)
 	if(continuation_bytes > 0)
 		return false;
 	return true;
+}
+
+int is_surrogate_pair(uint16_t code_unit)
+{
+	if(code_unit >= 0xD800 && code_unit <= 0xDBFF)
+		return 1;
+	else if(code_unit >= 0xDC00 && code_unit <= 0xDFFF)
+		return 2;
+	else
+		return 0;
+}
+
+uint32_t decode_surrogate_pair(uint16_t first_code_unit, uint16_t second_code_unit)
+{
+	// whoever is calling us should do this check currently...
+	// So far, our one caller is the string parser, and it returns a parse error.
+	assert(is_surrogate_pair(first_code_unit) == 1
+		|| is_surrogate_pair(second_code_unit) == 2);
+
+	return ((first_code_unit - 0xD800) << 10)
+		| (second_code_unit - 0xDC00);
 }
 

@@ -25,16 +25,18 @@
 #ifndef LIBJSON__JSON_ARRAY_H
 #define LIBJSON__JSON_ARRAY_H
 
-#include "json.h"
-
 #include <vector>
+
+#include "json.h"
+#include "json_unused.h"
 
 namespace json
 {
 	class Array : public Value
 	{
 	public:
-		typedef std::vector<Value *>::const_iterator const_iterator;
+		class iterator;
+		class const_iterator;
 
 		Array() : Value(TYPE_ARRAY) { }
 		Array(const Array &a);
@@ -43,19 +45,112 @@ namespace json
 		void swap(json::Array &a);
 		json::Array &operator = (const json::Array &a);
 
-		Value *operator [] (int index) { return m_values[index]; }
+		Value &operator [] (int index) { return *(m_values[index]); }
 
 		void pushBack(const Value *v);
 		void pushBack(const Value &v) { pushBack(&v); }
 		void pushBackTake(Value *v) { m_values.push_back(v); }
 
-		const_iterator begin() const { return m_values.begin(); }
-		const_iterator end() const { return m_values.end(); }
+		iterator begin() { return iterator(m_values.begin()); }
+		const_iterator begin() const { return const_iterator(m_values.begin()); }
+		iterator end() { return iterator(m_values.end()); }
+		const_iterator end() const { return const_iterator(m_values.end()); }
 
 		size_t size() const { return m_values.size(); }
 		bool empty() const { return m_values.empty(); }
 
 		Value *clone() const { return new Array(*this); }
+
+		// Note: We break our own casing rules just to keep with STL.
+
+		class iterator
+		{
+		public:
+			iterator() { }
+			iterator(const iterator &i) : m_i(i.m_i) { }
+
+			Value &operator * () { return **m_i; }
+			Value *operator -> () { return *m_i; }
+
+			// Pre increment
+			iterator &operator ++ ()
+			{
+				++m_i;
+				return *this;
+			}
+			iterator &operator -- ()
+			{
+				--m_i;
+				return *this;
+			}
+
+			// Post increment
+			iterator operator ++ (int JSON_UNUSED(unused))
+			{
+				iterator temp(*this);
+				return ++temp;
+			}
+			iterator operator -- (int JSON_UNUSED(unused))
+			{
+				iterator temp(*this);
+				return --temp;
+			}
+
+			bool operator == (const iterator &i) const { return m_i == i.m_i; }
+			bool operator != (const iterator &i) const { return m_i != i.m_i; }
+
+		private:
+			friend class const_iterator;
+			friend class Array;
+
+			iterator(const std::vector<Value *>::iterator &i) : m_i(i) { }
+
+			std::vector<Value *>::iterator m_i;
+		};
+
+		class const_iterator
+		{
+		public:
+			const_iterator() { }
+			const_iterator(const iterator &i) : m_i(i.m_i) { }
+
+			Value &operator * () { return **m_i; }
+			Value *operator -> () { return *m_i; }
+
+			// Pre increment
+			const_iterator &operator ++ ()
+			{
+				++m_i;
+				return *this;
+			}
+			const_iterator &operator -- ()
+			{
+				--m_i;
+				return *this;
+			}
+
+			// Post increment
+			const_iterator operator ++ (int JSON_UNUSED(unused))
+			{
+				const_iterator temp(*this);
+				return ++temp;
+			}
+			const_iterator operator -- (int JSON_UNUSED(unused))
+			{
+				const_iterator temp(*this);
+				return --temp;
+			}
+
+			bool operator == (const const_iterator &i) const { return m_i == i.m_i; }
+			bool operator != (const const_iterator &i) const { return m_i != i.m_i; }
+
+		private:
+			friend class Array;
+
+			const_iterator(const std::vector<Value *>::const_iterator &i) : m_i(i) { }
+
+			std::vector<Value *>::const_iterator m_i;
+		};
 
 	private:
 		std::vector<Value *> m_values;
