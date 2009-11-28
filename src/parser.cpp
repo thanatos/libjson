@@ -45,6 +45,16 @@ void check_stream(std::istream &s)
 	}
 }
 
+/* Read a character from a stream, and then check the stream for errors.
+ */
+char checked_stream_get(std::istream &s)
+{
+	char c;
+	s.get(c);
+	check_stream(s);
+	return c;
+}
+
 /* Read a string from a stream.
  * If we can't read the passed string from the stream, throw an exception.
  */
@@ -55,8 +65,7 @@ void read_string(std::istream &s, const std::string &str)
 
 	for(i = str.begin(); i != str.end(); ++i)
 	{
-		s.get(c);
-		check_stream(s);
+		c = checked_stream_get(s);
 		if(c != *i)
 			throw json::ParseException("Expected \"" + str + "\" input, but didn't find it.");
 	}
@@ -195,8 +204,7 @@ void read_four_hex_digits(std::istream &s, char *four_hex)
 {
 	for(size_t i = 0; i < 4; ++i)
 	{
-		four_hex[i] = s.get();
-		check_stream(s);
+		four_hex[i] = checked_stream_get(s);
 		if(!((four_hex[i] >= '0' && four_hex[i] <= '9')
 			|| (four_hex[i] >= 'A' && four_hex[i] <= 'F')
 			|| (four_hex[i] >= 'a' && four_hex[i] <= 'f')))
@@ -233,7 +241,7 @@ std::string read_json_string_basic(std::istream &s)
 			break;
 
 		// Characters below 0x20 must be escaped.
-		if(c < 0x20)
+		if((unsigned char)c < 0x20)
 			throw json::ParseException();
 
 		if(c == '\\')
@@ -437,9 +445,7 @@ void parse_item(std::istream &s, std::stack<json::Value *> &struct_stack)
 	{
 		key = read_json_string_basic(s);
 		eat_whitespace(s);
-		char colon = s.get();
-		check_stream(s);
-		if(colon != ':')
+		if(checked_stream_get(s) != ':')
 			throw json::ParseException("Expected \':\' token.");
 		eat_whitespace(s);
 	}
